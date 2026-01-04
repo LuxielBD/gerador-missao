@@ -45,72 +45,72 @@
 function rolar(lista) {
   return lista[Math.floor(Math.random() * lista.length)];
 }
+
 function rolarCombinado(lista, marcador) {
   const limpa = lista.filter(l => l !== marcador);
   const primeiro = rolar(limpa);
   const segundo = rolar(limpa.filter(l => l !== primeiro));
   return `${primeiro} e ${segundo}`;
-}  
+}
 
 /********************
  * TABELAS DE ROLAGEM
  ********************/
 const tabelas = {
   sujeito: [
-    'um inocente curioso',
-    'um criminoso',
-    'uma pessoa influente',
-    'um bando cultista',
-    'um cultista independente',
-    'um ex-agente da Ordo Realitas',
-    'um item amaldiçoado',
-    'uma criatura paranormal'
+    'inocente curioso',
+    'criminoso',
+    'pessoa influente (magnata, político...)',
+    'bando cultista',
+    'cultista independente',
+    'ex-agente da Ordo Realitas',
+    'item amaldiçoado',
+    'criatura paranormal'
   ],
   acao: [
-    'está invocando uma criatura de propósito',
+    'invocou uma criatura de propósito',
     'invocou uma criatura sem querer',
     'está sequestrando inocentes',
     'está assassinando inocentes',
-    'usa um item amaldiçoado para cometer crimes',
+    'está usando um ritual item amaldiçoado para cometer crimes mundanos (roubo, extorsão...)',
     'está recrutando cultistas',
     'está pesquisando um ritual perigoso',
     'está coletando itens amaldiçoados',
-    'matou um agente da Ordo Realitas'
+    'matou um agente da Ordo Realitas',
+    'acao combinada*'
   ],
-local: [
-  'escola', 'hospital', 'vilarejo', 'fazenda', 'mata fechada',
-  'becos de metrópole', 'arranha-céu', 'grande loja de departamento',
-  'esgoto', 'zona industrial da cidade', 'shopping center', 'orfanato',
-  'museu', 'cemitério', 'delegacia ou base militar', 'mansão',
-  'antiga sede da Ordo Realitas', 'navio', 'ilha remota',
-  'local combinado*' // ← ADIÇÃO
+  local: [
+    'escola','hospital','vilarejo','fazenda','mata fechada','becos de metrópole','arranha-céu',
+    'grande loja de departamento','esgoto','zona industrial da cidade','shopping center','orfanato',
+    'museu','cemitério','delegacia ou base militar','mansão','antiga sede da Ordo Realitas','navio','ilha remota',
+    'local combinado*'
   ],
   amigo: [
-    'um civil alheio ao paranormal',
-    'um civil exposto ao paranormal',
-    'um antigo conhecido dos agentes',
-    'um agente da Ordo Realitas'
+    'civil alheio ao paranormal',
+    'civil exposto ao paranormal',
+    'antigo conhecido dos agentes',
+    'agente da Ordo Realitas'
   ],
-objeto: [
-  'um equipamento',
-  'um ingrediente para um ritual poderoso',
-  `um equipamento modificado com <strong>${rolar([1,2,3]) - 1}</strong> modificações`,
-  'um artefato raro da Ordo Realitas',
-  'um item amaldiçoado',
-  'objeto combinado*' // ← ADIÇÃO
+  objeto: [
+    'equipamento',
+    'ingrediente para um ritual poderoso (máscara ritualística, gema rara...)',
+    `equipamento modificado com <strong>${rolar([1,2,3]) - 1}</strong> modificações`,
+    'artefato com grande valor para a Ordo Realitas (tomo antigo, relíquia ancestral...)',
+    'item amaldiçoado',
+    'objeto combinado*'
   ],
   evento: [
-    'o aparecimento de uma criatura paranormal de grande poder',
+    'o aparecimento de uma/outra criatura paranormal de grande poder',
     'a chegada de reforços inimigos',
-    'uma doença paranormal afetando o aliado',
-    'civis se revoltando contra os agentes',
+    'uma doença paranormal/maldição afetando o aliado',
+    'civis se revoltando contra eles',
     'a revelação de que o aliado era o vilão',
     'a descoberta de que as ações do inimigo eram justificadas',
-    'a perda de equipamentos',
+    'a perda de seus equipamentos (por furto, falhas tecnológicas...)',
     'ter que proteger um civil',
-    'a perda de comunicação com a Ordo Realitas',
+    'a perda de comunicação com a Ordo Realitas e acesso ao sistema de crédito',
     'agentes da lei os importunando',
-    'um desastre em grande escala',
+    'um desastre em grande escala (incêndio, tempestade, furacão, agitação civil...)',
     'o aparecimento de um antigo inimigo'
   ]
 };
@@ -121,30 +121,33 @@ objeto: [
 function gerarHistoria() {
   const r = {
     sujeito: rolar(tabelas.sujeito),
-    acao: rolar(tabelas.acao),
+    acao: null,
     amigo: rolar(tabelas.amigo),
     local: null,
     objeto: null,
     evento: rolar(tabelas.evento)
-
-    r.local = r.local === null
-  ? (rolar(tabelas.local) === 'local combinado*'
-      ? rolarCombinado(tabelas.local, 'local combinado*')
-      : rolar(tabelas.local))
-  : r.local;
-
-r.objeto = r.objeto === null
-  ? (rolar(tabelas.objeto) === 'objeto combinado*'
-      ? rolarCombinado(tabelas.objeto, 'objeto combinado*')
-      : rolar(tabelas.objeto))
-  : r.objeto;
   };
+
+  const acaoSorteada = rolar(tabelas.acao);
+  r.acao = acaoSorteada === 'acao combinada*'
+    ? rolarCombinado(tabelas.acao, 'acao combinada*')
+    : acaoSorteada;
+
+  const localSorteado = rolar(tabelas.local);
+  r.local = localSorteado === 'local combinado*'
+    ? rolarCombinado(tabelas.local, 'local combinado*')
+    : localSorteado;
+
+  const objetoSorteado = rolar(tabelas.objeto);
+  r.objeto = objetoSorteado === 'objeto combinado*'
+    ? rolarCombinado(tabelas.objeto, 'objeto combinado*')
+    : objetoSorteado;
 
   document.getElementById('historia').innerHTML = `
     Um(a) <span class="highlight">${r.sujeito}</span>
     <span class="highlight">${r.acao}</span> em um(a)
-    <span class="highlight">${r.local}</span>. Durante a investigação, o grupo terá a ajuda de
-    <span class="highlight">${r.amigo}</span> e poderá encontrar
+    <span class="highlight">${r.local}</span>. Durante a investigação, o grupo terá a ajuda de um(a)
+    <span class="highlight">${r.amigo}</span> e poderá encontrar 
     <span class="highlight">${r.objeto}</span>. Porém, em determinado momento, os agentes serão surpreendidos por
     <span class="highlight">${r.evento}</span>.
   `;
@@ -158,54 +161,52 @@ r.objeto = r.objeto === null
 function gerarDetalhes(r) {
   const detalhes = [];
 
-  /* Criatura */
+  function paraCadaParte(valor, fn) {
+    valor.split(' e ').forEach(v => fn(v.trim()));
+  }
+
   if (r.sujeito.includes('criatura')) {
-    detalhes.push(
-      `A criatura é do elemento <strong>${rolar(['Sangue','Morte','Conhecimento','Energia'])}</strong>.`
-    );
+    detalhes.push(`A criatura é do elemento <strong>${rolar(['Sangue','Morte','Conhecimento','Energia'])}</strong>.`);
   }
 
-    const criaturainv = [
-    'está invocando uma criatura de propósito',
-    'invocou uma criatura sem querer',
+  const criaturainv = [
+    'invocou uma criatura de propósito',
+    'invocou uma criatura sem querer'
   ];
-    if (criaturainv.some(l => r.acao.includes(l))) {
-    detalhes.push(
-      `A criatura invocada é do elemento <strong>${rolar(['Sangue','Morte','Conhecimento','Energia'])}</strong>.`
-    );
-  }
 
-  /* Locais habitados */
+  paraCadaParte(r.acao, parte => {
+    if (criaturainv.some(l => parte.includes(l))) {
+      detalhes.push(`A criatura invocada é do elemento <strong>${rolar(['Sangue','Morte','Conhecimento','Energia'])}</strong>.`);
+    }
+  });
+
   const locaisHabitados = [
-    'escola','hospital','vilarejo','fazenda','arranha-céu',
-    'grande loja de departamento','zona industrial da cidade',
-    'shopping center','orfanato','museu','mansão','navio'
+    'escola','hospital','vilarejo','fazenda','arranha-céu','grande loja de departamento',
+    'zona industrial da cidade','shopping center','orfanato','museu','mansão','navio'
   ];
 
-  if (locaisHabitados.some(l => r.local.includes(l))) {
-    detalhes.push(
-      `O local está <strong>${rolar(['abandonado','ativo/habitado'])}</strong>.`
-    );
-  }
+  paraCadaParte(r.local, parte => {
+    if (locaisHabitados.some(l => parte.includes(l))) {
+      detalhes.push(`O local (${parte}) está <strong>${rolar(['abandonado','habitado'])}</strong>.`);
+    }
+  });
 
-  /* Equipamentos */
-  const objetosEquipamento = [
-    'equipamento',
-    'equipamento modificado',
-    'item amaldiçoado'
-  ];
-
-  if (objetosEquipamento.some(o => r.objeto.includes(o))) {
-    detalhes.push(
-      `O equipamento/item encontrado é <strong>${rolar(['uma arma','uma proteção','um equipamento geral'])}</strong>.`
-    );
-  }
-
-  /* Agente */
   if (r.amigo.includes('Ordo Realitas')) {
-    detalhes.push(
-      `O agente aliado está <strong>${rolar(['em atividade','aposentado'])}</strong>.`
-    );
+    detalhes.push(`O agente aliado está <strong>${rolar(['em atividade','aposentado'])}</strong>.`);
+  }
+
+  const objetosEquipamento = [
+    'equipamento','equipamento modificado','item amaldiçoado'
+  ];
+
+  paraCadaParte(r.objeto, parte => {
+    if (objetosEquipamento.some(o => parte.includes(o))) {
+      detalhes.push(`O item (${parte}) é <strong>${rolar(['uma arma','uma proteção','um equipamento geral/acessório'])}</strong>.`);
+    }
+  });
+
+  if (r.evento.includes('criatura')) {
+    detalhes.push(`A criatura que aparece é do elemento <strong>${rolar(['Sangue','Morte','Conhecimento','Energia'])}</strong>.`);
   }
 
   document.getElementById('detalhesTexto').innerHTML = detalhes.length
