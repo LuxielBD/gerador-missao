@@ -1,56 +1,47 @@
 <!DOCTYPE html>
-<!--
-  PWA – Gerador de Missões Ordo Realitas
-  Lógica corrigida e estável
--->
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Gerador de Missões - OPRPG</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#000000">
-<link rel="icon" href="icons/icon-192.png">
 
-
-
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" href="./icon.png">
 
   <style>
     body {
       font-family: Spectral, sans-serif;
-      background: #000000; /* pitch black */
+      background: #000000;
       color: #e5e7eb;
       margin: 0;
       padding: 20px;
     }
 
-    h1, h2 {
-      color: #f9fafb;
-    }
+    h1, h2 { color: #f9fafb; }
 
     .card {
-      background: #0b0b0b; /* preto em tom mais claro */
+      background: #0b0b0b;
       border-radius: 12px;
       padding: 16px;
       margin-bottom: 16px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, .8);
       border: 1px solid #151515;
     }
 
     button {
-      background: #b91c1c; /* vermelho */
+      background: #b91c1c;
       border: none;
       padding: 12px 18px;
-      color: #ffffff;
+      color: #fff;
       border-radius: 8px;
-      cursor: pointer;
       font-size: 16px;
       font-weight: bold;
+      cursor: pointer;
     }
 
-    button:hover {
-      background: #dc2626; /* vermelho mais vivo */
-    }
+    button:hover { background: #dc2626; }
 
     .story {
       font-size: 18px;
@@ -58,11 +49,12 @@
     }
 
     .highlight {
-      color: #dc2626; /* vermelho para textos randomizados */
+      color: #dc2626;
       font-weight: bold;
     }
   </style>
 </head>
+
 <body>
 
 <h1>Gerador de Missões – OPRPG</h1>
@@ -79,6 +71,15 @@
   <h2>Detalhes Revelados</h2>
   <div id="detalhesTexto">Nenhum detalhe revelado ainda.</div>
 </div>
+
+<script>
+/* ========= SERVICE WORKER ========= */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js');
+  });
+}
+</script>
 
 <script>
 /********************
