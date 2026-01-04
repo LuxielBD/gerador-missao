@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-
+<!--
+  PWA – Gerador de Missões Ordo Realitas
+  Lógica corrigida e estável
+-->
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gerador Ordo Realitas</title>
-  <link rel="manifest" href="./manifest.json" />
+  <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#1f2937" />
 
   <style>
@@ -61,7 +64,7 @@
 <h1>Gerador de Missões – Ordo Realitas</h1>
 
 <div class="card">
-  <button id="btnGerar">🎲 Gerar Missão Automática</button>
+  <button id="btnGerar">Gerar Missão Automática</button>
 </div>
 
 <div class="card story" id="historia">
@@ -258,7 +261,7 @@ document.getElementById('btnGerar').addEventListener('click', gerarHistoria);
  * SERVICE WORKER
  ********************/
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js');
+  navigator.serviceWorker.register('sw.js');
 }
 </script>
 
