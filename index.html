@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <!--
   PWA – Gerador de Missões Ordo Realitas
-  Pronto para GitHub Pages
-  Inclui: geração automática + detalhes por asterisco
+  Lógica corrigida e estável
 -->
 <html lang="pt-BR">
 <head>
@@ -11,6 +10,7 @@
   <title>Gerador Ordo Realitas</title>
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#1f2937" />
+
   <style>
     body { font-family: Arial, sans-serif; background:#111827; color:#e5e7eb; margin:0; padding:20px; }
     h1,h2 { color:#f9fafb; }
@@ -22,155 +22,211 @@
   </style>
 </head>
 <body>
-  <h1>Gerador de Missões – Ordo Realitas</h1>
 
-  <div class="card">
-    <button onclick="gerarHistoria()">🎲 Gerar Missão Automática</button>
-  </div>
+<h1>Gerador de Missões – Ordo Realitas</h1>
 
-  <div class="card story" id="historia">
-    Clique no botão para gerar uma missão.
-  </div>
+<div class="card">
+  <button id="btnGerar">🎲 Gerar Missão Automática</button>
+</div>
 
-  <div class="card" id="detalhes">
-    <h2>Detalhes Revelados</h2>
-    <div id="detalhesTexto">Nenhum detalhe revelado ainda.</div>
-  </div>
+<div class="card story" id="historia">
+  Clique no botão para gerar uma missão.
+</div>
 
-  <script>
-    const tabelas = {
-      sujeito: [
-        'um inocente curioso',
-        'um criminoso',
-        'uma pessoa influente',
-        'um bando cultista',
-        'um cultista independente',
-        'um ex-agente da Ordo Realitas',
-        'um item amaldiçoado',
-        'uma criatura paranormal poderosa'
-      ],
-      acao: [
-        'está invocando uma criatura de propósito',
-        'invocou uma criatura sem querer',
-        'está sequestrando inocentes',
-        'está assassinando inocentes',
-        'usa um item amaldiçoado para cometer crimes',
-        'está recrutando cultistas',
-        'está pesquisando um ritual perigoso',
-        'está coletando itens amaldiçoados',
-        'mudou a mente de alguém da Ordo Realitas',
-        'está envolvido em múltiplas atividades suspeitas'
-      ],
-      local: [
-        'uma escola', 'um hospital', 'um vilarejo', 'uma fazenda', 'uma mata fechada',
-        'becos de uma metrópole', 'um arranha-céu', 'uma grande loja de departamento',
-        'um esgoto', 'uma zona industrial decadente', 'um shopping center', 'um orfanato',
-        'um museu', 'um cemitério', 'uma delegacia ou base militar', 'uma mansão',
-        'a antiga sede da Ordo Realitas', 'um navio', 'uma ilha remota', 'uma rua deserta'
-      ],
-      amigo: [
-        'um civil alheio ao paranormal',
-        'um civil exposto ao paranormal',
-        'um antigo conhecido dos agentes',
-        'um ocultista da Ordo Realitas'
-      ],
-      objeto: [
-        'um equipamento especial',
-        'um ingrediente para ritual',
-        'um equipamento modificado',
-        'um artefato raro da Ordo Realitas'
-      ],
-      evento: [
-        'o aparecimento de uma criatura paranormal',
-        'a chegada de reforços inimigos',
-        'o uso inesperado de um poder paranormal',
-        'civis se revoltando contra os agentes',
-        'a revelação de que o aliado era o vilão',
-        'a descoberta de que as ações do inimigo eram justificadas',
-        'a perda de equipamentos importantes',
-        'a necessidade urgente de proteger um civil',
-        'a perda de comunicação com a Ordo Realitas',
-        'a interferência de autoridades locais',
-        'um desastre em larga escala',
-        'o aparecimento de um antigo inimigo'
-      ]
-    };
+<div class="card" id="detalhes">
+  <h2>Detalhes Revelados</h2>
+  <div id="detalhesTexto">Nenhum detalhe revelado ainda.</div>
+</div>
 
-    function rolar(lista) {
-      return lista[Math.floor(Math.random() * lista.length)];
-    }
+<script>
+/********************
+ * FUNÇÕES BÁSICAS
+ ********************/
+function rolar(lista) {
+  return lista[Math.floor(Math.random() * lista.length)];
+}
+function rolarCombinado(lista, marcador) {
+  const limpa = lista.filter(l => l !== marcador);
+  const primeiro = rolar(limpa);
+  const segundo = rolar(limpa.filter(l => l !== primeiro));
+  return `${primeiro} e ${segundo}`;
+}  
 
-    function gerarHistoria() {
-      const sujeito = rolar(tabelas.sujeito);
-      const acao = rolar(tabelas.acao);
-      const local = rolar(tabelas.local);
-      const amigo = rolar(tabelas.amigo);
-      const objeto = rolar(tabelas.objeto);
-      const evento = rolar(tabelas.evento);
+/********************
+ * TABELAS DE ROLAGEM
+ ********************/
+const tabelas = {
+  sujeito: [
+    'um inocente curioso',
+    'um criminoso',
+    'uma pessoa influente',
+    'um bando cultista',
+    'um cultista independente',
+    'um ex-agente da Ordo Realitas',
+    'um item amaldiçoado',
+    'uma criatura paranormal'
+  ],
+  acao: [
+    'está invocando uma criatura de propósito',
+    'invocou uma criatura sem querer',
+    'está sequestrando inocentes',
+    'está assassinando inocentes',
+    'usa um item amaldiçoado para cometer crimes',
+    'está recrutando cultistas',
+    'está pesquisando um ritual perigoso',
+    'está coletando itens amaldiçoados',
+    'matou um agente da Ordo Realitas'
+  ],
+local: [
+  'escola', 'hospital', 'vilarejo', 'fazenda', 'mata fechada',
+  'becos de metrópole', 'arranha-céu', 'grande loja de departamento',
+  'esgoto', 'zona industrial da cidade', 'shopping center', 'orfanato',
+  'museu', 'cemitério', 'delegacia ou base militar', 'mansão',
+  'antiga sede da Ordo Realitas', 'navio', 'ilha remota',
+  'local combinado*' // ← ADIÇÃO
+],
+  ],
+  amigo: [
+    'um civil alheio ao paranormal',
+    'um civil exposto ao paranormal',
+    'um antigo conhecido dos agentes',
+    'um agente da Ordo Realitas'
+  ],
+objeto: [
+  'um equipamento',
+  'um ingrediente para um ritual poderoso',
+  `um equipamento modificado com <strong>${rolar([1,2,3]) - 1}</strong> modificações`,
+  'um artefato raro da Ordo Realitas',
+  'um item amaldiçoado',
+  'objeto combinado*' // ← ADIÇÃO
+],
+  ],
+  evento: [
+    'o aparecimento de uma criatura paranormal de grande poder',
+    'a chegada de reforços inimigos',
+    'uma doença paranormal afetando o aliado',
+    'civis se revoltando contra os agentes',
+    'a revelação de que o aliado era o vilão',
+    'a descoberta de que as ações do inimigo eram justificadas',
+    'a perda de equipamentos',
+    'ter que proteger um civil',
+    'a perda de comunicação com a Ordo Realitas',
+    'agentes da lei os importunando',
+    'um desastre em grande escala',
+    'o aparecimento de um antigo inimigo'
+  ]
+};
 
-      const texto = `
-        Um(a) <span class="highlight">${sujeito}</span> 
-        <span class="highlight">${acao}</span> em um(a) 
-        <span class="highlight">${local}</span>. Durante a investigação, o grupo terá a ajuda de 
-        <span class="highlight">${amigo}</span> e poderá encontrar 
-        <span class="highlight">${objeto}</span>. Porém, em determinado momento, os agentes serão surpreendidos por 
-        <span class="highlight">${evento}</span>.
-      `;
+/********************
+ * GERADOR PRINCIPAL
+ ********************/
+function gerarHistoria() {
+  const r = {
+    sujeito: rolar(tabelas.sujeito),
+    acao: rolar(tabelas.acao),
+    amigo: rolar(tabelas.amigo),
+    local: null,
+    objeto: null,
+    evento: rolar(tabelas.evento)
 
-      document.getElementById('historia').innerHTML = texto;
+    r.local = r.local === null
+  ? (rolar(tabelas.local) === 'local combinado*'
+      ? rolarCombinado(tabelas.local, 'local combinado*')
+      : rolar(tabelas.local))
+  : r.local;
 
-      gerarDetalhes({ sujeito, local, amigo, objeto });
-    }</span> 
-        <span class="highlight">${acao}</span> em um(a) 
-        <span class="highlight">${local}</span>. Durante a investigação, o grupo terá a ajuda de 
-        <span class="highlight">${amigo}</span> e poderá encontrar 
-        <span class="highlight">${objeto}</span>. Porém, em determinado momento, os agentes serão surpreendidos por 
-        <span class="highlight">${evento}</span>.
-      `;
+r.objeto = r.objeto === null
+  ? (rolar(tabelas.objeto) === 'objeto combinado*'
+      ? rolarCombinado(tabelas.objeto, 'objeto combinado*')
+      : rolar(tabelas.objeto))
+  : r.objeto;
+  };
 
-      document.getElementById('historia').innerHTML = texto;
-    }
+  document.getElementById('historia').innerHTML = `
+    Um(a) <span class="highlight">${r.sujeito}</span>
+    <span class="highlight">${r.acao}</span> em um(a)
+    <span class="highlight">${r.local}</span>. Durante a investigação, o grupo terá a ajuda de
+    <span class="highlight">${r.amigo}</span> e poderá encontrar
+    <span class="highlight">${r.objeto}</span>. Porém, em determinado momento, os agentes serão surpreendidos por
+    <span class="highlight">${r.evento}</span>.
+  `;
 
-    function gerarDetalhes(resultados) {
-      let detalhes = [];
+  gerarDetalhes(r);
+}
 
-      // Criatura / Sujeito
-      if (resultados.sujeito.includes('criatura')) {
-        const elemento = rolar(['Sangue', 'Morte', 'Conhecimento', 'Energia']);
-        detalhes.push(`A criatura possui afinidade com o elemento <strong>${elemento}</strong>.`);
-      }
+/********************
+ * DETALHES CONTEXTUAIS
+ ********************/
+function gerarDetalhes(r) {
+  const detalhes = [];
 
-      // Local – Escola
-      if (resultados.local.includes('escola')) {
-        const estado = rolar(['abandonada', 'habitadas por civis', 'ocupada por cultistas']);
-        detalhes.push(`A escola está <strong>${estado}</strong>.`);
-      }
+  /* Criatura */
+  if (r.sujeito.includes('criatura')) {
+    detalhes.push(
+      `A criatura é do elemento <strong>${rolar(['Sangue','Morte','Conhecimento','Energia'])}</strong>.`
+    );
+  }
 
-      // Objeto
-      if (resultados.objeto.includes('equipamento')) {
-        const tipoEquip = rolar([
-          'um dispositivo de contenção paranormal',
-          'uma arma experimental da Ordo',
-          'um artefato de proteção ritualística'
-        ]);
-        detalhes.push(`O equipamento encontrado é ${tipoEquip}.`);
-      }
+    const criaturainv = [
+    'está invocando uma criatura de propósito',
+    'invocou uma criatura sem querer',
+  ];
+    if (criaturainv.some(l => r.acao.includes(l))) {
+    detalhes.push(
+      `A criatura invocada é do elemento <strong>${rolar(['Sangue','Morte','Conhecimento','Energia'])}</strong>.`
+    );
+  }
 
-      // Amigo – Agente
-      if (resultados.amigo.includes('Ordo')) {
-        const status = rolar(['em atividade', 'aposentado', 'afastado por suspeita']);
-        mentions = rolar(['conhece bem o local', 'tem informações confidenciais', 'esconde algo importante']);
-        detalhes.push(`O agente está <strong>${status}</strong> e ${mentions}.`);
-      }
+  /* Locais habitados */
+  const locaisHabitados = [
+    'escola','hospital','vilarejo','fazenda','arranha-céu',
+    'grande loja de departamento','zona industrial da cidade',
+    'shopping center','orfanato','museu','mansão','navio'
+  ];
 
-      document.getElementById('detalhesTexto').innerHTML = detalhes.length
-        ? detalhes.join('<br><br>')
-        : 'Nenhum detalhe adicional foi revelado nesta rolagem.';
-    }
+  if (locaisHabitados.some(l => r.local.includes(l))) {
+    detalhes.push(
+      `O local está <strong>${rolar(['abandonado','ativo/habitado'])}</strong>.`
+    );
+  }
 
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
-    }
-  </script>
+  /* Equipamentos */
+  const objetosEquipamento = [
+    'equipamento',
+    'equipamento modificado',
+    'item amaldiçoado'
+  ];
+
+  if (objetosEquipamento.some(o => r.objeto.includes(o))) {
+    detalhes.push(
+      `O equipamento/item encontrado é <strong>${rolar(['uma arma','uma proteção','um equipamento geral'])}</strong>.`
+    );
+  }
+
+  /* Agente */
+  if (r.amigo.includes('Ordo Realitas')) {
+    detalhes.push(
+      `O agente aliado está <strong>${rolar(['em atividade','aposentado'])}</strong>.`
+    );
+  }
+
+  document.getElementById('detalhesTexto').innerHTML = detalhes.length
+    ? detalhes.join('<br><br>')
+    : 'Nenhum detalhe adicional foi revelado nesta rolagem.';
+}
+
+/********************
+ * EVENTO DO BOTÃO
+ ********************/
+document.getElementById('btnGerar').addEventListener('click', gerarHistoria);
+
+/********************
+ * SERVICE WORKER
+ ********************/
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+
 </body>
 </html>
