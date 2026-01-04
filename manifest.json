@@ -1,6 +1,6 @@
 {
-  "name": "Gerador de Missão OPRPG",
-  "short_name": "OPRPG Missões",
+  "name": "Gerador de Missões OPRPG",
+  "short_name": "OPRPG",
   "description": "Gerador de missões e eventos paranormais de Ordem RPG",
   "start_url": "./index.html",
   "scope": "./",
@@ -8,12 +8,13 @@
   "orientation": "portrait",
   "background_color": "#000000",
   "theme_color": "#000000",
+  "prefer_related_applications": false,
   "icons": [
     {
-      "src": "icon.png",
+      "src": "./icon.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
-    },
+    }
   ]
 }
