@@ -1,22 +1,25 @@
 {
-  "name": "Gerador de Missão ORDEM PARANORMAL",
-  "short_name": "OPRPG Missão",
-  "start_url": "./",
+  "name": "Gerador de Missão OPRPG",
+  "short_name": "OPRPG Missões",
+  "description": "Gerador de missões e eventos paranormais de Ordem RPG",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#000000",
   "theme_color": "#000000",
-  "orientation": "portrait",
   "icons": [
     {
       "src": "icons/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "icons/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
