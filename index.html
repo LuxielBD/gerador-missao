@@ -68,8 +68,8 @@
 </div>
 
 <div class="card" id="detalhes">
-  <h2>Detalhes Revelados</h2>
-  <div id="detalhesTexto">Nenhum detalhe revelado ainda.</div>
+  <h2>Informações Extras</h2>
+  <div id="detalhesTexto">Nenhuma informação extra ainda.</div>
 </div>
 
 <script>
@@ -254,7 +254,7 @@ function gerarDetalhes(r) {
 
   document.getElementById('detalhesTexto').innerHTML = detalhes.length
     ? detalhes.join('<br><br>')
-    : 'Nenhum detalhe adicional foi revelado nesta rolagem.';
+    : 'Nenhuma informacao extra foi necessária.';
 }
 
 /********************
