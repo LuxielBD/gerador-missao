@@ -1,6 +1,6 @@
 {
   "name": "Gerador de Missões OPRPG",
-  "short_name": "OPRPG",
+  "short_name": "Gerador de Missões",
   "description": "Gerador de missões e eventos paranormais de Ordem RPG",
   "start_url": "./index.html",
   "scope": "./",
