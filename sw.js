@@ -5,6 +5,7 @@ const FILES_TO_CACHE = [
   "./index.html",
   "./manifest.json",
   "./icon.png"
+  "./style.css"
 ];
 
 self.addEventListener("install", event => {
